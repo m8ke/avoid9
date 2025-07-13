@@ -1,0 +1,86 @@
+<app-layout>
+    <h1 class="text-4xl font-extrabold mb-2 font-serif sm:w-[80%]">
+        Transfer your secrets with end-to-end encryption
+    </h1>
+
+    <h2 class="mb-10 text-xl">
+        Sign, seal and transfer
+    </h2>
+
+    <form [formGroup]="encryptForm">
+        <div class="relative mb-3">
+            <textarea
+                [maxLength]="5000"
+                formControlName="content"
+                class="min-h-30 w-full shadow-xs bg-gray-100 outline-0 px-4 py-3 rounded-xl placeholder:text-zinc-400 outline-1 -outline-offset-1 outline-gray-200 [textarea:focus-within]:outline-2 [textarea:focus-within]:-outline-offset-2 [textarea:focus-within]:outline-blue-600"
+                placeholder="Your self-destructive secret..."></textarea>
+            <span
+                class="absolute bottom-0 right-0 my-3 me-2 text-xs py-1 px-2 rounded-lg bg-zinc-300 text-zinc-500">
+                    {{ contentLength }}/5000
+            </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between">
+            <div class="flex flex-col sm:flex-row">
+                <app-dropdown
+                    class="sm:w-50 w-full"
+                    formControlName="expireAt"
+                    placeholder="Expiration time">
+                    <app-dropdown-item [value]="1">
+                        Expires in 1 minute
+                    </app-dropdown-item>
+                    <app-dropdown-item [value]="5">
+                        Expires in 5 minutes
+                    </app-dropdown-item>
+                    <app-dropdown-item [value]="30">
+                        Expires in 30 minutes
+                    </app-dropdown-item>
+                    <app-dropdown-item [value]="60">
+                        Expires in 1 hour
+                    </app-dropdown-item>
+                    <app-dropdown-item [value]="6 * 60">
+                        Expires in 6 hours
+                    </app-dropdown-item>
+                    <app-dropdown-item [value]="12 * 60">
+                        Expires in 12 hours
+                    </app-dropdown-item>
+                    <app-dropdown-item [value]="24 * 60">
+                        Expires in 1 day
+                    </app-dropdown-item>
+                    <app-dropdown-item [value]="7 * 24 * 60" [isSelected]="true">
+                        Expires in 1 week
+                    </app-dropdown-item>
+                    <app-dropdown-item [value]="30 * 24 * 60">
+                        Expires in 1 month
+                    </app-dropdown-item>
+                </app-dropdown>
+
+                <app-input
+                    class="sm:ms-2 sm:w-60 w-full"
+                    type="text"
+                    name="passphrase"
+                    id="passphrase"
+                    autocomplete="off"
+                    placeholder="Optional passphrase"
+                    formControlName="passphrase">
+                    <div
+                        (click)="generatePassphrase()"
+                        class="shrink-0 cursor-pointer text-white bg-black hover:bg-zinc-800 select-none text-xs me-1 px-2 py-2 rounded-lg">
+                        Generate
+                    </div>
+
+                    <app-input-helper>
+                        At least 6 characters
+                    </app-input-helper>
+                </app-input>
+            </div>
+
+            <app-button
+                class="w-full sm:w-auto"
+                (click)="submitEncrypt()" [disabled]="encryptForm.invalid">
+                <app-icon name="lock-closed" class="text-white me-1"/>
+                Encrypt now
+            </app-button>
+        </div>
+    </form>
+</app-layout>

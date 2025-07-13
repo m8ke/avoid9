@@ -1,0 +1,7 @@
+<li
+    [routerLink]="routerLink()"
+    [fragment]="fragment()"
+    [ngClass]="{'text-blue-500 border-blue-500': isActive, 'border-transparent': !isActive}"
+    class="me-2 inline-block p-4 border-b-2 hover:text-blue-500 hover:border-blue-500">
+    <ng-content/>
+</li>

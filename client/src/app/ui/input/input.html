@@ -1,0 +1,21 @@
+<div>
+    <div
+        class="flex items-center shadow-xs rounded-xl bg-white outline-1 -outline-offset-1 outline-gray-200 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-blue-600">
+        <input
+            #inputRef
+            [id]="id()"
+            [type]="type()"
+            [name]="name()"
+            [value]="value()"
+            [readOnly]="readonly()"
+            [placeholder]="placeholder()"
+            [autocomplete]="autocomplete()"
+            (input)="onInput($event)"
+            (blur)="onTouched()"
+            class="block w-35 h-10 grow py-2 px-4 text-gray-900 placeholder:text-gray-400 focus:outline-none text-sm/6"
+        >
+        <ng-content/>
+    </div>
+
+    <ng-content select="app-input-helper"/>
+</div>

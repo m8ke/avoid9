@@ -1,0 +1,123 @@
+<app-layout>
+    <div class="flex flex-row mb-5">
+        <div class="me-5 w-[70%]">
+            <h1 class="text-4xl font-extrabold mb-2 font-serif">
+                Your secure transfer is ready to share
+            </h1>
+
+            <h2 class="text-xl">
+                Copy and send the link
+            </h2>
+        </div>
+    </div>
+
+    <app-tab>
+        <app-tab-item
+            fragment="secret">
+            Secret
+        </app-tab-item>
+
+        <app-tab-item
+            fragment="history">
+            History
+        </app-tab-item>
+    </app-tab>
+
+    <div class="mb-5">
+        @if (isShareChannel("history")) {
+            <app-timeline>
+                <app-timeline-item [datetime]="'06.07.2025 12:12:12'">
+                    Secret has been burnt and never available to anyone
+                </app-timeline-item>
+                <app-timeline-item [datetime]="'06.06.2025 12:12:12'">
+                    Secret has been revealed
+                </app-timeline-item>
+                <app-timeline-item [datetime]="'05.06.2025 12:12:12'">
+                    <div class="flex flex-col w-full">
+                        <div class="mb-2">
+                            Secret encrypted and expires on 24.07.2025 15:50:45
+                        </div>
+
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+                            <div class="bg-blue-600 h-1.5 rounded-full dark:bg-blue-500" style="width: 45%"></div>
+                        </div>
+                    </div>
+                </app-timeline-item>
+            </app-timeline>
+        } @else {
+            <app-input
+                name="link"
+                autocomplete="off"
+                (ref)="onInputRef($event)"
+                [defaultValue]="secretLink"
+                [readonly]="true">
+                <div
+                    (click)="selectAndCopyToClipboard()"
+                    class="shrink-0 cursor-pointer text-white bg-black hover:bg-zinc-800 select-none text-xs me-1 px-2 py-2 rounded-lg">
+                    Copy to clipboard
+                </div>
+
+                <div
+                    (click)="modalQrCode()?.open()"
+                    class="shrink-0 cursor-pointer text-white bg-black hover:bg-zinc-800 select-none text-xs me-1 px-2 py-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                    </svg>
+                </div>
+
+                <app-input-helper>
+                    {{ hasPassphrase ? 'Passphrase protected, share it separately!' : 'It is not passphrase protected, be careful!' }}
+                </app-input-helper>
+            </app-input>
+
+            <app-modal #modalQrCodeRef>
+                <div class="flex flex-col w-full">
+                    <h3 class="text-base font-semibold text-gray-900">
+                        Share this QR code securely
+                    </h3>
+
+                    <div class="mt-2 mb-5">
+                        <p class="text-sm text-gray-500">
+                            Scan this QR code with mobile phone camera to reveal the secret.
+                        </p>
+                    </div>
+
+                    <qrcode
+                        [qrdata]="secretLink"
+                        [width]="128"
+                        [margin]="0"
+                        [errorCorrectionLevel]="'M'"
+                        (qrCodeURL)="getQrCodeUrl($event)"
+                    />
+                </div>
+            </app-modal>
+        }
+    </div>
+
+    <button
+        (click)="modalConfirmBurn()?.open(burnSecret)"
+        type="submit"
+        class="h-10 w-full flex flex-row items-center justify-center bg-rose-600 hover:bg-rose-500 outline-0 px-4 py-3 rounded-xl text-white cursor-pointer text-sm font-semibold shadow-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+             stroke="currentColor" class="size-5 me-1">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z"/>
+        </svg>
+
+        Burn the secret
+    </button>
+
+    <app-modal #modalConfirmBurnRef>
+        <h3 class="text-base font-semibold text-gray-900">
+            Are you sure about this?
+        </h3>
+        <div class="mt-2">
+            <p class="text-sm text-gray-500">
+                Are you sure you want to burn the secret. This action is permanent and cannot be undone.
+            </p>
+        </div>
+    </app-modal>
+</app-layout>
