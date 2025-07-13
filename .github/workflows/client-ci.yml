@@ -1,9 +1,10 @@
-name: CI
+name: Client CI
 
 on:
   pull_request:
     paths:
       - 'client/**'
+      - '.github/workflows/client-**'
 
 jobs:
   build:
@@ -15,4 +16,7 @@ jobs:
         with:
           node-version: '24.x'
       - run: npm install
+        working-directory: client
+
       - run: npm run build
+        working-directory: client
